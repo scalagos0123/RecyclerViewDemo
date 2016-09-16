@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.RingtoneManager;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
@@ -47,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
         r.setLayoutManager(layoutManager);
     }
 
+    public void addItem(View view) {
+        adapter.addItem(new SampleData("Added item", "Sample content"), 0);
+        r.scrollToPosition(0);
+    }
+
     private void makeNotification(String selectedCard) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this);
         builder.setAutoCancel(true);
@@ -56,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, new Intent(), 0));
         builder.setSound(RingtoneManager.getActualDefaultRingtoneUri(MainActivity.this, RingtoneManager.TYPE_NOTIFICATION));
         builder.setPriority(NotificationCompat.PRIORITY_HIGH);
-        builder.setVibrate(new long[] {50, 100, 50, 100, 50, 100});
+        builder.setVibrate(new long[] {0, 250, 250, 250});
         builder.setLights(Color.GREEN, 0, 1000);
 
         NotificationManager notifService = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -145,8 +153,10 @@ public class MainActivity extends AppCompatActivity {
             return dataCollection.size();
         }
 
-
-
+        public void addItem(SampleData dataToBeAdded, int position) {
+            dataCollection.add(position, dataToBeAdded);
+            notifyItemInserted(position);
+        }
 
     }
 }
