@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView r;
     private SampleAdapter adapter;
     private RecyclerView.OnItemTouchListener s;
+    private int i = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,21 +52,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addItem(View view) {
-        adapter.addItem(new SampleData("Added item", "Sample content"), 0);
+        adapter.addItem(new SampleData("Added item #" + i, "Sample content #" + i), 0);
         r.scrollToPosition(0);
+        i++;
     }
 
     private void makeNotification(String selectedCard) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this);
         builder.setAutoCancel(true);
+        builder.setDefaults(Notification.DEFAULT_ALL);
         builder.setSmallIcon(R.drawable.ic_star_black_24dp);
         builder.setContentTitle("Sample notification");
         builder.setContentText(selectedCard + " selected");
-        builder.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, new Intent(), 0));
-        builder.setSound(RingtoneManager.getActualDefaultRingtoneUri(MainActivity.this, RingtoneManager.TYPE_NOTIFICATION));
-        builder.setPriority(NotificationCompat.PRIORITY_HIGH);
-        builder.setVibrate(new long[] {0, 250, 250, 250});
-        builder.setLights(Color.GREEN, 0, 1000);
+        builder.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(), 0));
 
         NotificationManager notifService = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notifService.notify(0, builder.build());
